@@ -74,8 +74,8 @@ public class Robot extends TimedRobot {
     leftFollower.configureEncoder(leftEncoder.get(), 360, 0.1524);
     rightFollower.configureEncoder(rightEncoder.get(), 250, 0.1524);
 
-    leftFollower.configurePIDVA(1, 0, 0, 1/2, 0);
-    rightFollower.configurePIDVA(1, 0, 0, 1/2, 0);
+    leftFollower.configurePIDVA(1, 0, 0.9, 1/2.5, 0);
+    rightFollower.configurePIDVA(1, 0, 0.9, 1/3.2, 0);
   }
 
   /**
