@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.Drivetrain;
+import frc.util.logger.Logger;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
@@ -57,6 +58,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    Logger.initLogger();
+    Logger.log("Discount Morphine! While supplies last!");
 
     System.out.println("Running robot init");
     File leftFile = new File("/home/lvuser/trajectories/Unnamed.left.pf1.csv");
