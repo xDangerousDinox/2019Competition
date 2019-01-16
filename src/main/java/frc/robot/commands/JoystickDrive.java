@@ -24,10 +24,10 @@ public class JoystickDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double y = Robot.joystick.getY();
+    double y = -1 * Robot.joystick.getY();
     double z = Robot.joystick.getZ();
     
-    Robot.drivetrain.arcade(y, z);
+    Robot.drivetrain.arcade(y * 0.75, z * 0.5);
   }
 
   // Make this return true when this Command no longer needs to run execute()

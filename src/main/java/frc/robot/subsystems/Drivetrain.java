@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.RobotMap;
 import frc.robot.commands.JoystickDrive;
 
 /**
@@ -23,13 +24,13 @@ public class Drivetrain extends Subsystem {
   // here. Call these from Commands.
 
   // Left motor controllers
-  private Talon frontLeft = new Talon(2);
-  private Talon backLeft = new Talon(1);
+  private Talon frontLeft = new Talon(RobotMap.FRONT_LEFT_TALON);
+  private Talon backLeft = new Talon(RobotMap.BACK_LEFT_TALON);
   private SpeedControllerGroup left = new SpeedControllerGroup(frontLeft, backLeft);
 
   // Right motor controllers
-  private Talon frontRight = new Talon(3);
-  private Talon backRight = new Talon(0);
+  private Talon frontRight = new Talon(RobotMap.FRONT_RIGHT_TALON);
+  private Talon backRight = new Talon(RobotMap.BACK_RIGHT_TALON);
   private SpeedControllerGroup right = new SpeedControllerGroup(frontRight, backRight);
 
   // Drive controller
@@ -72,6 +73,10 @@ public class Drivetrain extends Subsystem {
   }
 
   public void arcade(double xSpeed, double zRotation) {
+    System.out.println("This is left encoder value:" + leftEncoder.get());
+    System.out.println("This is right encoder value:" + rightEncoder.get());
+    //System.out.println("This is total distance travelled (left):" + leftEncoder.getDistance());
+    //System.out.println("This is total distance travelled (right):" + rightEncoder.getDistance());
     drive.arcadeDrive(xSpeed, zRotation);
   }
 

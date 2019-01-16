@@ -20,9 +20,7 @@ import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.Drivetrain;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.EncoderFollower;
-import jaci.pathfinder.modifiers.TankModifier;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -65,9 +63,9 @@ public class Robot extends TimedRobot {
     File rightFile = new File("/home/lvuser/trajectories/Unnamed.right.pf1.csv");
     Trajectory leftTraj = Pathfinder.readFromCSV(leftFile);
     Trajectory rightTraj = Pathfinder.readFromCSV(rightFile);
-    for (int i = 0; i < leftTraj.length(); i++) {
-      System.out.println(leftTraj.get(i).velocity);
-    }
+    // for (int i = 0; i < leftTraj.length(); i++) {
+    //   System.out.println(leftTraj.get(i).velocity);
+    // }
     leftFollower = new EncoderFollower(leftTraj);
     rightFollower = new EncoderFollower(rightTraj);
     
@@ -76,8 +74,8 @@ public class Robot extends TimedRobot {
     leftFollower.configureEncoder(leftEncoder.get(), 360, 0.1524);
     rightFollower.configureEncoder(rightEncoder.get(), 250, 0.1524);
 
-    leftFollower.configurePIDVA(1, 0, 0, 1/2, 0);
-    rightFollower.configurePIDVA(1, 0, 0, 1/2, 0);
+    leftFollower.configurePIDVA(1, 0, 0.9, 1/2.5, 0);
+    rightFollower.configurePIDVA(1, 0, 0.9, 1/3.2, 0);
   }
 
   /**
@@ -160,12 +158,12 @@ public class Robot extends TimedRobot {
         double leftOutput = leftFollower.calculate(leftEncoder.get());
         double rightOutput = rightFollower.calculate(rightEncoder.get());
 
-        double gyro_heading = gyro.getAngle() % 360;
-        double desired_heading = Pathfinder.r2d(leftFollower.getHeading());
+        // double gyro_heading = gyro.getAngle() % 360;
+        // double desired_heading = Pathfinder.r2d(leftFollower.getHeading());
 
-        double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
-        double turn = 0.8 * (-1.0/80.0) * angleDifference;
-        //double turn = 0;
+        // double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
+        // double turn = 0.8 * (-1.0/80.0) * angleDifference;
+        double turn = 0;
         drivetrain.tank(leftOutput + turn, rightOutput - turn);
         break;
     }
