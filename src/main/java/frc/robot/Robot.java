@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+   
 
     System.out.println("Running robot init");
     File leftFile = new File("/home/lvuser/trajectories/Unnamed.left.pf1.csv");
