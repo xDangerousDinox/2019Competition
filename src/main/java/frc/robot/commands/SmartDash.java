@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class JoystickDrive extends Command {
-  public JoystickDrive() {
+public class SmartDash extends Command {
+  public SmartDash() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.drivetrain);
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
@@ -25,13 +25,8 @@ public class JoystickDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double y = -1 * Robot.joystick.getY();
-    double z = Robot.joystick.getZ();
-
     SmartDashboard.putData("Right Drive Train Encoder", Robot.drivetrain.getRightEncoder());
     SmartDashboard.putData("Left Drive Train Encoder", Robot.drivetrain.getLeftEncoder());
-    
-    Robot.drivetrain.arcade(y * 0.75, z * 0.5);
   }
 
   // Make this return true when this Command no longer needs to run execute()
