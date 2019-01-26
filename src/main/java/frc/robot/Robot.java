@@ -9,6 +9,14 @@ package frc.robot;
 
 import java.io.File;
 
+import org.opencv.core.Mat;
+import org.opencv.core.Rect;
+import org.opencv.imgproc.Imgproc;
+
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,6 +24,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.VisionThread;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.Drivetrain;
 import frc.util.logger.Logger;
@@ -33,6 +42,7 @@ import jaci.pathfinder.followers.EncoderFollower;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
+  private static final String kVisionAuto = "VisionFollow";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -49,47 +59,70 @@ public class Robot extends TimedRobot {
 
   private JoystickDrive drive = new JoystickDrive();
 
+  private VisionThread visionthread;
+  private double centerX = 0.0;
+
+  private final Object imgLock = new Object();
+
   /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
    */
+  @SuppressWarnings("deprecated")
   @Override
   public void robotInit() {
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    camera.setResolution(320, 240);
+
+    CvSink cvSink = CameraServer.getInstance().getVideo();
+    CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+
+    Mat source = new Mat();
+    Mat output = new Mat();
+
+    visionthread = new VisionThread(camera, new GripPipeline(), pipeline -> {
+      if (!pipeline.filterContoursOutput().isEmpty()) {
+        Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+        synchronized (imgLock) {
+          centerX = r.x + (r.width / 2);
+        }
+      }
+    });
+    visionthread.start();
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
    
 
-    Logger.initLogger();
-    Logger.log("Discount Morphine! While supplies last!");
-
-    System.out.println("Running robot init");
-    File leftFile = new File("/home/lvuser/trajectories/Unnamed.left.pf1.csv");
-    File rightFile = new File("/home/lvuser/trajectories/Unnamed.right.pf1.csv");
-    Trajectory leftTraj = Pathfinder.readFromCSV(leftFile);
-    Trajectory rightTraj = Pathfinder.readFromCSV(rightFile);
+    // System.out.println("Running robot init");
+    File leftFile = new File("/home/lvuser/deploy/ForwardLeftThenRight.left.pf1.csv");
+    File rightFile = new File("/home/lvuser/deploy/ForwardLeftThenRight.right.pf1.csv");
+    Trajectory leftTraj = Pathfinder.readFromCSV(rightFile);
+    Trajectory rightTraj = Pathfinder.readFromCSV(leftFile);
     // for (int i = 0; i < leftTraj.length(); i++) {
-    //   System.out.println(leftTraj.get(i).velocity);
+    // System.out.println(leftTraj.get(i).velocity);
     // }
     leftFollower = new EncoderFollower(leftTraj);
     rightFollower = new EncoderFollower(rightTraj);
-    
+
     // encoder position, 360 ticks/revolution, 0.1524 m = 6 in wheel diameter
     // right encoder is different: 250 ticks/revolution
     leftFollower.configureEncoder(leftEncoder.get(), 360, 0.1524);
     rightFollower.configureEncoder(rightEncoder.get(), 250, 0.1524);
 
-    leftFollower.configurePIDVA(1, 0, 0.9, 1/2.5, 0);
-    rightFollower.configurePIDVA(1, 0, 0.9, 1/3.2, 0);
+    leftFollower.configurePIDVA(1, 0, 0.9, 1 / 2.5, 0);
+    rightFollower.configurePIDVA(1, 0, 0.9, 1 / 3.2, 0);
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use
-   * this for items like diagnostics that you want ran during disabled,
-   * autonomous, teleoperated and test.
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
@@ -97,53 +130,54 @@ public class Robot extends TimedRobot {
 
   /**
    * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString line to get the auto name from the text box below the Gyro
+   * between different autonomous modes using the dashboard. The sendable chooser
+   * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+   * remove all of the chooser code and uncomment the getString line to get the
+   * auto name from the text box below the Gyro
    *
-   * <p>You can add additional auto modes by adding additional comparisons to
-   * the switch structure below with additional strings. If using the
-   * SendableChooser make sure to add them to the chooser code above as well.
+   * <p>
+   * You can add additional auto modes by adding additional comparisons to the
+   * switch structure below with additional strings. If using the SendableChooser
+   * make sure to add them to the chooser code above as well.
    */
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
-    m_autoSelected = kDefaultAuto;
+    m_autoSelected = kVisionAuto;
     // autoSelected = SmartDashboard.getString("Auto Selector",
     // defaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    // System.out.println("Auto selected: " + m_autoSelected);
 
-    switch(m_autoSelected) {
-      case kCustomAuto:
-        break;
-      case kDefaultAuto:
-        //System.out.println("Auto init done");
-        gyro.reset();
-        // in meters
-        double maxVelocity = 2.0;
-        double maxAccel = 2.0;
-        double maxJerk = 60.0;
+    switch (m_autoSelected) {
+    case kCustomAuto:
+      break;
+    case kDefaultAuto:
+      // System.out.println("Auto init done");
+      gyro.reset();
+      // in meters
+      double maxVelocity = 2.0;
+      double maxAccel = 2.0;
+      double maxJerk = 60.0;
 
-        // generate trajectory
-        /*
-        Waypoint[] points = new Waypoint[] {
-          new Waypoint(-4, -1, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-          new Waypoint(-2, -2, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
-          new Waypoint(0, 0, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
-        };
-        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 
-          0.02, maxVelocity, maxAccel, maxJerk);
-        Trajectory trajectory = Pathfinder.generate(points, config);
-        
+      // generate trajectory
+      /*
+       * Waypoint[] points = new Waypoint[] { new Waypoint(-4, -1,
+       * Pathfinder.d2r(-45)), // Waypoint @ x=-4, y=-1, exit angle=-45 degrees new
+       * Waypoint(-2, -2, 0), // Waypoint @ x=-2, y=-2, exit angle=0 radians new
+       * Waypoint(0, 0, 0) // Waypoint @ x=0, y=0, exit angle=0 radians };
+       * Trajectory.Config config = new
+       * Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC,
+       * Trajectory.Config.SAMPLES_HIGH, 0.02, maxVelocity, maxAccel, maxJerk);
+       * Trajectory trajectory = Pathfinder.generate(points, config);
+       * 
+       * 
+       * // 0.6m = 23.75 in wheelbase (dist b/w left and right wheel) TankModifier
+       * modifier = new TankModifier(trajectory).modify(0.6); leftFollower = new
+       * EncoderFollower(modifier.getLeftTrajectory()); rightFollower = new
+       * EncoderFollower(modifier.getRightTrajectory());
+       */
 
-        // 0.6m = 23.75 in wheelbase (dist b/w left and right wheel)
-        TankModifier modifier = new TankModifier(trajectory).modify(0.6);
-        leftFollower = new EncoderFollower(modifier.getLeftTrajectory());
-        rightFollower = new EncoderFollower(modifier.getRightTrajectory());
-        */
-
-        break;
+      break;
     }
   }
 
@@ -154,23 +188,32 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
     switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-        // Put default auto code here
-        //System.out.println("Auto periodic run");
-        double leftOutput = leftFollower.calculate(leftEncoder.get());
-        double rightOutput = rightFollower.calculate(rightEncoder.get());
+    case kCustomAuto:
+      // Put custom auto code here
+      break;
+    case kDefaultAuto:
+      // Put default auto code here
+      // System.out.println("Auto periodic run");
+      double leftOutput = leftFollower.calculate(leftEncoder.get());
+      double rightOutput = rightFollower.calculate(rightEncoder.get());
 
-        // double gyro_heading = gyro.getAngle() % 360;
-        // double desired_heading = Pathfinder.r2d(leftFollower.getHeading());
+      // double gyro_heading = gyro.getAngle() % 360;
+      // double desired_heading = Pathfinder.r2d(leftFollower.getHeading());
 
-        // double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
-        // double turn = 0.8 * (-1.0/80.0) * angleDifference;
-        double turn = 0;
-        drivetrain.tank(leftOutput + turn, rightOutput - turn);
-        break;
+      // double angleDifference = Pathfinder.boundHalfDegrees(desired_heading -
+      // gyro_heading);
+      // double turn = 0.8 * (-1.0/80.0) * angleDifference;
+      double turnTraj = 0;
+      drivetrain.tank(leftOutput + turnTraj, rightOutput - turnTraj);
+      break;
+    case kVisionAuto:
+      double centerX;
+      synchronized (imgLock) {
+        centerX = this.centerX;
+      }
+      double turn = centerX - (320 / 2);
+      drivetrain.arcade(0, turn * 0.005);
+      break;
     }
   }
 
