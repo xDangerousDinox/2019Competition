@@ -31,7 +31,7 @@ public class JoystickDrive extends Command {
     SmartDashboard.putData("Right Drive Train Encoder", Robot.drivetrain.getRightEncoder());
     SmartDashboard.putData("Left Drive Train Encoder", Robot.drivetrain.getLeftEncoder());
     
-    Robot.drivetrain.arcade(y * 0.75, z * 0.5);
+    Robot.drivetrain.arcade(y * 1, z * 0.75);
   }
 
   // Make this return true when this Command no longer needs to run execute()
