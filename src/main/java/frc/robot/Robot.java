@@ -48,7 +48,12 @@ public class Robot extends TimedRobot {
 
   public static Joystick joystick = new Joystick(0);
 
+  
+  
+  public static BaseCamera camera = null;//TODO REPLACE THIS IMMEDITELY!
   public static Drivetrain drivetrain = new Drivetrain();
+
+
 
   Encoder leftEncoder = drivetrain.getLeftEncoder();
   Encoder rightEncoder = drivetrain.getRightEncoder();
