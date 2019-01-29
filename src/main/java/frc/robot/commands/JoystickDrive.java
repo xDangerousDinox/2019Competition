@@ -49,5 +49,6 @@ public class JoystickDrive extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    this.end();
   }
 }

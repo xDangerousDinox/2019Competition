@@ -17,6 +17,10 @@ public final class AutoAlign {
     private double a;
     private double b;
 
+    public AutoAlign(double[][] points, double d) {
+        this(points[0], points[1], d);
+    }
+
     public AutoAlign(double[] l, double[] r, double d) {
         this(l[0], l[1], r[0], r[1], d);
     }

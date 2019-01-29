@@ -9,6 +9,9 @@ import frc.robot.AutoAlign;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
+/**
+ * This command orients the robot towards the centerpoint.
+ */
 public class OrientTowardsCenterpointCommand extends Command {
 
     private PIDController pid;
@@ -29,10 +32,9 @@ public class OrientTowardsCenterpointCommand extends Command {
 
         @Override
         public double pidGet() {
-            double[] l = Robot.camera.getLeftPoint();
-            double[] r = Robot.camera.getRightPoint();
+            double[][] ps = Robot.camera.getPoints();
 
-            return AutoAlign.getError(l[0], l[1], r[0], r[1]);
+            return AutoAlign.getError(ps[0][0], ps[0][1], ps[1][0], ps[1][1]);
         }
 
     }
@@ -69,7 +71,6 @@ public class OrientTowardsCenterpointCommand extends Command {
     
     @Override
     protected void execute() {
-        
     }
 
     @Override

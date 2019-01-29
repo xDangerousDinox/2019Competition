@@ -3,10 +3,20 @@ package frc.robot;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public abstract class BaseCamera extends Subsystem {
-    public abstract double getLeftX();
-    public abstract double getRightX();
+    protected abstract double getLeftX();
+    protected abstract double getRightX();
+
+    /**
+     * Returns the distance from the camera to the centerpoint.
+     */
     public abstract double getD();
 
+    /**
+     * Returns the points.
+     * 
+     * l = ([0][0], [0][1])
+     * r = ([1][0], [1][1])
+     */
     public double[][] getPoints() {
         double[][] output = new double[2][2];
 
