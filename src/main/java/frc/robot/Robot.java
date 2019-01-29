@@ -9,14 +9,6 @@ package frc.robot;
 
 import java.io.File;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Rect;
-import org.opencv.imgproc.Imgproc;
-
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -76,24 +68,24 @@ public class Robot extends TimedRobot {
   @SuppressWarnings("deprecated")
   @Override
   public void robotInit() {
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    camera.setResolution(320, 240);
+    // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    // camera.setResolution(320, 240);
 
-    CvSink cvSink = CameraServer.getInstance().getVideo();
-    CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+    // CvSink inputStream = CameraServer.getInstance().getVideo();
+    // CvSource outputStream = CameraServer.getInstance().putVideo("Contour", 320, 240);
 
-    Mat source = new Mat();
-    Mat output = new Mat();
+    // visionthread = new VisionThread(camera, new GripPipeline(), pipeline -> {
+    //   if (!pipeline.filterContoursOutput().isEmpty()) {
+    //     Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+    //     synchronized (imgLock) {
+    //       centerX = r.x + (r.width / 2);
 
-    visionthread = new VisionThread(camera, new GripPipeline(), pipeline -> {
-      if (!pipeline.filterContoursOutput().isEmpty()) {
-        Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-        synchronized (imgLock) {
-          centerX = r.x + (r.width / 2);
-        }
-      }
-    });
-    visionthread.start();
+    //       outputStream.putFrame(pipeline.cvErodeOutput());
+    //     }
+
+    //   }
+    // });
+    // visionthread.start();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
