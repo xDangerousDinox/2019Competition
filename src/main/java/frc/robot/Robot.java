@@ -38,8 +38,8 @@ public class Robot extends TimedRobot {
   private static final String kVisionAuto = "VisionFollow";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
-  public static Joystick joystick = new Joystick(0);
+  
+  public static OI oi = new OI();
   
   public static BaseCamera camera = null;//TODO REPLACE THIS IMMEDITELY!
   public static Drivetrain drivetrain = new Drivetrain();

@@ -12,6 +12,4 @@ public class RobotMap {
     public static final int FRONT_RIGHT_ENCODER = 4;
     public static final int BACK_RIGHT_ENCODER = 5;
 
-
-
 }
