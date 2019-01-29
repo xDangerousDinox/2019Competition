@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -73,10 +74,12 @@ public class Drivetrain extends Subsystem {
   }
 
   public void arcade(double xSpeed, double zRotation) {
-    System.out.println("This is left encoder value:" + leftEncoder.get());
-    System.out.println("This is right encoder value:" + rightEncoder.get());
+    // System.out.println("This is left encoder value:" + leftEncoder.get());
+    // System.out.println("This is right encoder value:" + rightEncoder.get());
     //System.out.println("This is total distance travelled (left):" + leftEncoder.getDistance());
     //System.out.println("This is total distance travelled (right):" + rightEncoder.getDistance());
+
+    //System.out.println("Gyro: " + gyro.getAngle());
     drive.arcadeDrive(xSpeed, zRotation);
   }
 
