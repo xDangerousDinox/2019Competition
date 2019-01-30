@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.VisionThread;
+import frc.robot.commands.AutoAlignCommand;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.Drivetrain;
+import frc.util.logger.Logger;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
@@ -36,9 +38,10 @@ public class Robot extends TimedRobot {
   private static final String kVisionAuto = "VisionFollow";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
-  public static Joystick joystick = new Joystick(0);
-
+  
+  public static OI oi = new OI();
+  
+  public static BaseCamera camera = null;//TODO REPLACE THIS IMMEDITELY!
   public static Drivetrain drivetrain = new Drivetrain();
 
   Encoder leftEncoder = drivetrain.getLeftEncoder();
@@ -167,7 +170,6 @@ public class Robot extends TimedRobot {
        * EncoderFollower(modifier.getLeftTrajectory()); rightFollower = new
        * EncoderFollower(modifier.getRightTrajectory());
        */
-
       break;
     }
   }

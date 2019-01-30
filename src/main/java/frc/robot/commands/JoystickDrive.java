@@ -25,8 +25,8 @@ public class JoystickDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double y = -1 * Robot.joystick.getY();
-    double z = Robot.joystick.getZ();
+    double y = -1 * Robot.oi.getDriveY();
+    double z = Robot.oi.getDriveZ();
 
     SmartDashboard.putData("Right Drive Train Encoder", Robot.drivetrain.getRightEncoder());
     SmartDashboard.putData("Left Drive Train Encoder", Robot.drivetrain.getLeftEncoder());
@@ -49,5 +49,6 @@ public class JoystickDrive extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    this.end();
   }
 }
