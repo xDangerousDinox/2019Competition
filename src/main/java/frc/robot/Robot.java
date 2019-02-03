@@ -9,6 +9,8 @@ package frc.robot;
 
 import java.io.File;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,8 +18,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.vision.VisionThread;
-import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.Drivetrain;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -48,43 +48,19 @@ public class Robot extends TimedRobot {
   EncoderFollower leftFollower;
   EncoderFollower rightFollower;
 
-  private JoystickDrive drive = new JoystickDrive();
-
-  private VisionThread visionthread;
-  private double centerX = 0.0;
-
-  private final Object imgLock = new Object();
+  private NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  private NetworkTable visionTable = inst.getTable("TestTable");
 
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
-  @SuppressWarnings("deprecated")
+
   @Override
   public void robotInit() {
-    // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    // camera.setResolution(320, 240);
-
-    // CvSink inputStream = CameraServer.getInstance().getVideo();
-    // CvSource outputStream = CameraServer.getInstance().putVideo("Contour", 320, 240);
-
-    // visionthread = new VisionThread(camera, new GripPipeline(), pipeline -> {
-    //   if (!pipeline.filterContoursOutput().isEmpty()) {
-    //     Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-    //     synchronized (imgLock) {
-    //       centerX = r.x + (r.width / 2);
-
-    //       outputStream.putFrame(pipeline.cvErodeOutput());
-    //     }
-
-    //   }
-    // });
-    // visionthread.start();
-
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-   
 
     // System.out.println("Running robot init");
     File leftFile = new File("/home/lvuser/deploy/ForwardLeftThenRight.left.pf1.csv");
@@ -198,11 +174,8 @@ public class Robot extends TimedRobot {
       drivetrain.tank(leftOutput + turnTraj, rightOutput - turnTraj);
       break;
     case kVisionAuto:
-      double centerX;
-      synchronized (imgLock) {
-        centerX = this.centerX;
-      }
-      double turn = centerX - (320 / 2);
+      System.out.println("CenterX:" + visionTable.getEntry("centerX").getDouble(0));
+      double turn = visionTable.getEntry("centerX").getDouble(0) - (320 / 2);
       drivetrain.arcade(0, turn * 0.005);
       break;
     }
