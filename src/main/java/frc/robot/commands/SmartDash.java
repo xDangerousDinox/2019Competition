@@ -27,6 +27,7 @@ public class SmartDash extends Command {
   protected void execute() {
     SmartDashboard.putData("Right Drive Train Encoder", Robot.drivetrain.getRightEncoder());
     SmartDashboard.putData("Left Drive Train Encoder", Robot.drivetrain.getLeftEncoder());
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
