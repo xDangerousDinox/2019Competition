@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.Drivetrain;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -36,14 +37,11 @@ public class Robot extends TimedRobot {
   private static final String kVisionAuto = "VisionFollow";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-<<<<<<< HEAD
 
   public static Joystick joystick = new Joystick(0);
 
-=======
   
   public static BaseCamera camera = new ImplCamera();//TODO REPLACE THIS IMMEDITELY!
->>>>>>> 169c2943c2dbd851a66ef40e4a0b85f2355870d1
   public static Drivetrain drivetrain = new Drivetrain();
 
   Encoder leftEncoder = drivetrain.getLeftEncoder();
@@ -53,19 +51,15 @@ public class Robot extends TimedRobot {
   EncoderFollower leftFollower;
   EncoderFollower rightFollower;
 
-<<<<<<< HEAD
   private NetworkTableInstance inst = NetworkTableInstance.getDefault();
   private NetworkTable visionTable = inst.getTable("TestTable");
-=======
   private JoystickDrive drive = new JoystickDrive();
 
-  private VisionThread visionthread;
   private double centerX = 0.0;
 
   public static OI oi = new OI();
 
   private final Object imgLock = new Object();
->>>>>>> 169c2943c2dbd851a66ef40e4a0b85f2355870d1
 
   /**
    * This function is run when the robot is first started up and should be used
