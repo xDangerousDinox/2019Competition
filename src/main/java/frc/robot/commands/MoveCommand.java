@@ -13,7 +13,10 @@ public class MoveCommand extends Command {
         this.requires(Robot.drivetrain);
         this.target = target;
         this.distance = 0.0;
+    }
 
+    @Override
+    protected void initialize() {
         Robot.drivetrain.getLeftEncoder().reset();
         Robot.drivetrain.getRightEncoder().reset();
 
@@ -27,7 +30,7 @@ public class MoveCommand extends Command {
 
     @Override
     protected boolean isFinished() {
-        return Math.abs(this.target - this.distance) < Constants.ALIGN_MOVE_TOLERANCE;
+        return this.target - this.distance < Constants.ALIGN_MOVE_TOLERANCE;
     }
 
     @Override

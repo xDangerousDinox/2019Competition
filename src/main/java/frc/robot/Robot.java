@@ -39,9 +39,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   
-  public static OI oi = new OI();
-  
-  public static BaseCamera camera = null;//TODO REPLACE THIS IMMEDITELY!
+  public static BaseCamera camera = new ImplCamera();//TODO REPLACE THIS IMMEDITELY!
   public static Drivetrain drivetrain = new Drivetrain();
 
   Encoder leftEncoder = drivetrain.getLeftEncoder();
@@ -55,6 +53,8 @@ public class Robot extends TimedRobot {
 
   private VisionThread visionthread;
   private double centerX = 0.0;
+
+  public static OI oi = new OI();
 
   private final Object imgLock = new Object();
 

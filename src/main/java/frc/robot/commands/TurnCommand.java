@@ -47,7 +47,12 @@ public class TurnCommand extends Command {
 
             this.pid.setSetpoint(angle);
             this.pid.setAbsoluteTolerance(0.2);
-            this.pid.enable();
+            
+    }
+
+    @Override
+    protected void initialize() {
+        this.pid.enable();
     }
 
     @Override

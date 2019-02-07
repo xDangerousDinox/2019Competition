@@ -18,4 +18,4 @@ public class AutoAlignCommand extends CommandGroup {
         this.addSequential(new MoveCommand(align.getB()));
     }
 
-}q
+}
