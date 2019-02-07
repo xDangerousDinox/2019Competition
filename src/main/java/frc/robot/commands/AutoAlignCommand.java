@@ -14,8 +14,8 @@ public class AutoAlignCommand extends CommandGroup {
 
         this.addSequential(new TurnCommand(align.getThetaB()));
         this.addSequential(new MoveCommand(align.getA()));
-        this.addSequential(new TurnCommand(90));
+        this.addSequential(new TurnCommand(-90));
         this.addSequential(new MoveCommand(align.getB()));
     }
 
-}
+}q
