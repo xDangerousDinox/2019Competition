@@ -175,8 +175,8 @@ public class Robot extends TimedRobot {
       break;
     case kVisionAuto:
       System.out.println("CenterX:" + visionTable.getEntry("centerX").getDouble(0));
-      double turn = visionTable.getEntry("centerX").getDouble(0) - (320 / 2);
-      drivetrain.arcade(0, turn * 0.005);
+      //double turn = visionTable.getEntry("centerX").getDouble(0) - (320 / 2);
+      //drivetrain.arcade(0, turn * 0.005);
       break;
     }
   }
