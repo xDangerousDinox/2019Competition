@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.Drivetrain;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -39,6 +40,8 @@ public class Robot extends TimedRobot {
 
   public static Joystick joystick = new Joystick(0);
 
+  
+  public static BaseCamera camera = new ImplCamera();//TODO REPLACE THIS IMMEDITELY!
   public static Drivetrain drivetrain = new Drivetrain();
 
   Encoder leftEncoder = drivetrain.getLeftEncoder();
@@ -50,6 +53,13 @@ public class Robot extends TimedRobot {
 
   private NetworkTableInstance inst = NetworkTableInstance.getDefault();
   private NetworkTable visionTable = inst.getTable("TestTable");
+  private JoystickDrive drive = new JoystickDrive();
+
+  private double centerX = 0.0;
+
+  public static OI oi = new OI();
+
+  private final Object imgLock = new Object();
 
   /**
    * This function is run when the robot is first started up and should be used

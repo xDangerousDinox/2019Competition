@@ -7,15 +7,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import frc.robot.RobotMap;
-import frc.robot.commands.JoystickDrive;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.command.*;
+import edu.wpi.first.wpilibj.drive.*;
+import frc.robot.*;
+import frc.robot.commands.*;
 
 /**
  * Add your docs here.
@@ -23,7 +19,6 @@ import frc.robot.commands.JoystickDrive;
 public class Drivetrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-
 
   // Left motor controllers
   private Talon frontLeft = new Talon(RobotMap.FRONT_LEFT_TALON);
@@ -46,7 +41,7 @@ public class Drivetrain extends Subsystem {
 
   public Drivetrain() {
     // Set up encoders
-		leftEncoder.setMaxPeriod(.1);
+    leftEncoder.setMaxPeriod(.1);
 		leftEncoder.setMinRate(10);
 		leftEncoder.setDistancePerPulse(0.0254 * 6 * Math.PI / 360);
 		leftEncoder.setReverseDirection(true);
@@ -94,6 +89,10 @@ public class Drivetrain extends Subsystem {
 
   public ADXRS450_Gyro getGyro() {
     return gyro;
+  }
+
+  public double getAngle() {
+    return this.gyro.getAngle();
   }
 
 }
