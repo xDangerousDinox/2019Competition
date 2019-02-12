@@ -7,11 +7,19 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.command.*;
-import edu.wpi.first.wpilibj.drive.*;
-import frc.robot.*;
-import frc.robot.commands.*;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.RobotMap;
+import frc.robot.commands.JoystickDrive;
 
 /**
  * Add your docs here.
@@ -19,6 +27,11 @@ import frc.robot.commands.*;
 public class Drivetrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+
+  // Test SparkMax
+
+  //public Spark testSparky = new Spark(4);
+  public CANSparkMax canSpark = new CANSparkMax(4, MotorType.kBrushless);
 
   // Left motor controllers
   private Talon frontLeft = new Talon(RobotMap.FRONT_LEFT_TALON);
@@ -42,16 +55,16 @@ public class Drivetrain extends Subsystem {
   public Drivetrain() {
     // Set up encoders
     leftEncoder.setMaxPeriod(.1);
-		leftEncoder.setMinRate(10);
-		leftEncoder.setDistancePerPulse(0.0254 * 6 * Math.PI / 360);
-		leftEncoder.setReverseDirection(true);
-		leftEncoder.setSamplesToAverage(7);
-		rightEncoder.setMaxPeriod(.1);
-		rightEncoder.setMinRate(10);
-		rightEncoder.setDistancePerPulse(0.0254 * 6 * Math.PI / 250);
-		rightEncoder.setReverseDirection(false);
+    leftEncoder.setMinRate(10);
+    leftEncoder.setDistancePerPulse(0.0254 * 6 * Math.PI / 360);
+    leftEncoder.setReverseDirection(true);
+    leftEncoder.setSamplesToAverage(7);
+    rightEncoder.setMaxPeriod(.1);
+    rightEncoder.setMinRate(10);
+    rightEncoder.setDistancePerPulse(0.0254 * 6 * Math.PI / 250);
+    rightEncoder.setReverseDirection(false);
     rightEncoder.setSamplesToAverage(7);
-    
+
     // Set up gyro
     gyro.calibrate();
 
@@ -69,13 +82,23 @@ public class Drivetrain extends Subsystem {
     drive.tankDrive(left, right);
   }
 
+  public void testSparkyDrive(double y) {
+    canSpark.set(y);
+    //testSparky.set(y);
+    //testSparky.getPosition();
+    // SmartDashboard.putNumber("Temperature", testSparky.getMotorTemperature());
+    // SmartDashboard.putNumber("Output", testSparky.getAppliedOutput());
+  }
+
   public void arcade(double xSpeed, double zRotation) {
     // System.out.println("This is left encoder value:" + leftEncoder.get());
     // System.out.println("This is right encoder value:" + rightEncoder.get());
-    //System.out.println("This is total distance travelled (left):" + leftEncoder.getDistance());
-    //System.out.println("This is total distance travelled (right):" + rightEncoder.getDistance());
+    // System.out.println("This is total distance travelled (left):" +
+    // leftEncoder.getDistance());
+    // System.out.println("This is total distance travelled (right):" +
+    // rightEncoder.getDistance());
 
-    //System.out.println("Gyro: " + gyro.getAngle());
+    // System.out.println("Gyro: " + gyro.getAngle());
     drive.arcadeDrive(xSpeed, zRotation);
   }
 
@@ -89,10 +112,6 @@ public class Drivetrain extends Subsystem {
 
   public ADXRS450_Gyro getGyro() {
     return gyro;
-  }
-
-  public double getAngle() {
-    return this.gyro.getAngle();
   }
 
 }

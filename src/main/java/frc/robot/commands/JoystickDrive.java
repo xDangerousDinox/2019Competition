@@ -27,11 +27,10 @@ public class JoystickDrive extends Command {
   protected void execute() {
     double y = -1 * Robot.joystick.getY();
     double z = Robot.joystick.getZ();
-
-    SmartDashboard.putData("Right Drive Train Encoder", Robot.drivetrain.getRightEncoder());
-    SmartDashboard.putData("Left Drive Train Encoder", Robot.drivetrain.getLeftEncoder());
-    
-   // Robot.drivetrain.arcade(y * 1, z * 0.75);
+    Robot.drivetrain.testSparkyDrive(y);
+    SmartDashboard.putNumber("Sparky", Robot.drivetrain.canSpark.get());
+    SmartDashboard.putNumber("Spark encoder", Robot.drivetrain.canSpark.getEncoder().getPosition());
+    //Robot.drivetrain.arcade(y * 1, z * 0.75);
   }
 
   // Make this return true when this Command no longer needs to run execute()

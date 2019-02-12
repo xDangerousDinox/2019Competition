@@ -1,12 +1,9 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.command.*;
-import edu.wpi.first.wpilibj.buttons.*;
-
-import frc.robot.subsystems.*;
-import frc.robot.*;
-import frc.robot.commands.*;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.AutoAlignCommand;
 
 /**
  * This class is the glue that binds the controls on the physical operator

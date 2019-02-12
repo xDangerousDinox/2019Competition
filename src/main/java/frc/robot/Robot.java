@@ -55,11 +55,8 @@ public class Robot extends TimedRobot {
   private NetworkTable visionTable = inst.getTable("TestTable");
   private JoystickDrive drive = new JoystickDrive();
 
-  private double centerX = 0.0;
-
   public static OI oi = new OI();
 
-  private final Object imgLock = new Object();
 
   /**
    * This function is run when the robot is first started up and should be used
