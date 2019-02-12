@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.*;
 import edu.wpi.first.wpilibj.drive.*;
@@ -21,37 +24,25 @@ public class Drivetrain extends Subsystem {
   // here. Call these from Commands.
 
   // Left motor controllers
-  private Talon frontLeft = new Talon(RobotMap.FRONT_LEFT_TALON);
-  private Talon backLeft = new Talon(RobotMap.BACK_LEFT_TALON);
-  private SpeedControllerGroup left = new SpeedControllerGroup(frontLeft, backLeft);
+  private CANSparkMax left1 = new CANSparkMax(RobotMap.LEFT_DRIVE_1, MotorType.kBrushless);
+  private CANSparkMax left2 = new CANSparkMax(RobotMap.LEFT_DRIVE_2, MotorType.kBrushless);
+  private CANSparkMax left3 = new CANSparkMax(RobotMap.LEFT_DRIVE_3, MotorType.kBrushless);
+
+  private SpeedControllerGroup leftMotors = new SpeedControllerGroup(left1, left2, left3);
 
   // Right motor controllers
-  private Talon frontRight = new Talon(RobotMap.FRONT_RIGHT_TALON);
-  private Talon backRight = new Talon(RobotMap.BACK_RIGHT_TALON);
-  private SpeedControllerGroup right = new SpeedControllerGroup(frontRight, backRight);
+  private CANSparkMax right1 = new CANSparkMax(RobotMap.RIGHT_DRIVE_1, MotorType.kBrushless);
+  private CANSparkMax right2 = new CANSparkMax(RobotMap.RIGHT_DRIVE_2, MotorType.kBrushless);
+  private CANSparkMax right3 = new CANSparkMax(RobotMap.RIGHT_DRIVE_3, MotorType.kBrushless);
+
+  private SpeedControllerGroup rightMotors = new SpeedControllerGroup(right1, right2, right3);
 
   // Drive controller
-  private DifferentialDrive drive = new DifferentialDrive(left, right);
-
-  // Drive-related sensors
-  private Encoder leftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
-  private Encoder rightEncoder = new Encoder(2, 3, false, Encoder.EncodingType.k4X);
+  private DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
 
   private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
   public Drivetrain() {
-    // Set up encoders
-    leftEncoder.setMaxPeriod(.1);
-		leftEncoder.setMinRate(10);
-		leftEncoder.setDistancePerPulse(0.0254 * 6 * Math.PI / 360);
-		leftEncoder.setReverseDirection(true);
-		leftEncoder.setSamplesToAverage(7);
-		rightEncoder.setMaxPeriod(.1);
-		rightEncoder.setMinRate(10);
-		rightEncoder.setDistancePerPulse(0.0254 * 6 * Math.PI / 250);
-		rightEncoder.setReverseDirection(false);
-    rightEncoder.setSamplesToAverage(7);
-    
     // Set up gyro
     gyro.calibrate();
 
@@ -77,14 +68,6 @@ public class Drivetrain extends Subsystem {
 
     //System.out.println("Gyro: " + gyro.getAngle());
     drive.arcadeDrive(xSpeed, zRotation);
-  }
-
-  public Encoder getLeftEncoder() {
-    return leftEncoder;
-  }
-
-  public Encoder getRightEncoder() {
-    return rightEncoder;
   }
 
   public ADXRS450_Gyro getGyro() {
