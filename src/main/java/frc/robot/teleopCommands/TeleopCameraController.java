@@ -8,12 +8,12 @@
 package frc.robot.teleopCommands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.CameraController;
+import frc.robot.Robot;
 
-public class CameraControllerTeleop extends Command {
-  public CameraControllerTeleop() {
+public class TeleopCameraController extends Command {
+  public TeleopCameraController() {
     // Use requires() here to declare subsystem dependencies
-    requires(CameraController);
+    requires(Robot.cameraController);
   }
 
   // Called just before this Command runs the first time
@@ -24,6 +24,10 @@ public class CameraControllerTeleop extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    double z = Robot.oi.getOperatorZ();
+    double x = Robot.oi.getOperatorX();
+    Robot.cameraController.setX(z);
+    Robot.cameraController.setX(x);
   }
 
   // Make this return true when this Command no longer needs to run execute()

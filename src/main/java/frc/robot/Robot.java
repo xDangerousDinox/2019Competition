@@ -9,17 +9,22 @@ package frc.robot;
 
 import java.io.File;
 
+import com.revrobotics.CANEncoder;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.JoystickDrive;
+import frc.robot.subsystems.CameraController;
+import frc.robot.subsystems.CargoArm;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.HatchArm;
+import frc.robot.teleopCommands.TeleopCameraController;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
@@ -32,34 +37,33 @@ import jaci.pathfinder.followers.EncoderFollower;
  * project.
  */
 public class Robot extends TimedRobot {
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private static final String kVisionAuto = "VisionFollow";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
-  public static Joystick joystick = new Joystick(0);
-
   
-  public static BaseCamera camera = new ImplCamera();//TODO REPLACE THIS IMMEDITELY!
+  public static BaseCamera camera = new ImplCamera();
   public static Drivetrain drivetrain = new Drivetrain();
+  public static CameraController cameraController = new CameraController();
+  public static CargoArm cargoArm = new CargoArm();
+  public static Climb climb = new Climb();
+  public static HatchArm hatchArm = new HatchArm();
 
-  Encoder leftEncoder = drivetrain.getLeftEncoder();
-  Encoder rightEncoder = drivetrain.getRightEncoder();
-  ADXRS450_Gyro gyro = drivetrain.getGyro();
+  private CANEncoder leftEncoder = drivetrain.getLeftEncoder();
+  private CANEncoder rightEncoder = drivetrain.getRightEncoder();
+  private ADXRS450_Gyro gyro = drivetrain.getGyro();
 
   EncoderFollower leftFollower;
   EncoderFollower rightFollower;
 
   private NetworkTableInstance inst = NetworkTableInstance.getDefault();
   private NetworkTable visionTable = inst.getTable("TestTable");
-  private JoystickDrive drive = new JoystickDrive();
-
-  private double centerX = 0.0;
 
   public static OI oi = new OI();
 
-  private final Object imgLock = new Object();
+  private Command teleopCameraController = new TeleopCameraController();
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -85,8 +89,8 @@ public class Robot extends TimedRobot {
 
     // encoder position, 360 ticks/revolution, 0.1524 m = 6 in wheel diameter
     // right encoder is different: 250 ticks/revolution
-    leftFollower.configureEncoder(leftEncoder.get(), 360, 0.1524);
-    rightFollower.configureEncoder(rightEncoder.get(), 250, 0.1524);
+    leftFollower.configureEncoder((int) leftEncoder.getPosition(), 360, 0.1524);
+    rightFollower.configureEncoder((int) rightEncoder.getPosition(), 250, 0.1524);
 
     leftFollower.configurePIDVA(1, 0, 0.9, 1 / 2.5, 0);
     rightFollower.configurePIDVA(1, 0, 0.9, 1 / 3.2, 0);
@@ -171,8 +175,8 @@ public class Robot extends TimedRobot {
     case kDefaultAuto:
       // Put default auto code here
       // System.out.println("Auto periodic run");
-      double leftOutput = leftFollower.calculate(leftEncoder.get());
-      double rightOutput = rightFollower.calculate(rightEncoder.get());
+      double leftOutput = leftFollower.calculate((int) leftEncoder.getPosition());
+      double rightOutput = rightFollower.calculate((int) rightEncoder.getPosition());
 
       // double gyro_heading = gyro.getAngle() % 360;
       // double desired_heading = Pathfinder.r2d(leftFollower.getHeading());
@@ -194,6 +198,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     super.teleopInit();
+    teleopCameraController.start();
   }
 
   /**

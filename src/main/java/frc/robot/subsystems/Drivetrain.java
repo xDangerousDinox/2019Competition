@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -23,23 +24,24 @@ public class Drivetrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  // Left motor controllers
+  //Left motor controllers
   private CANSparkMax left1 = new CANSparkMax(RobotMap.LEFT_DRIVE_1, MotorType.kBrushless);
   private CANSparkMax left2 = new CANSparkMax(RobotMap.LEFT_DRIVE_2, MotorType.kBrushless);
   private CANSparkMax left3 = new CANSparkMax(RobotMap.LEFT_DRIVE_3, MotorType.kBrushless);
 
   private SpeedControllerGroup leftMotors = new SpeedControllerGroup(left1, left2, left3);
 
-  // Right motor controllers
+  //Right motor controllers
   private CANSparkMax right1 = new CANSparkMax(RobotMap.RIGHT_DRIVE_1, MotorType.kBrushless);
   private CANSparkMax right2 = new CANSparkMax(RobotMap.RIGHT_DRIVE_2, MotorType.kBrushless);
   private CANSparkMax right3 = new CANSparkMax(RobotMap.RIGHT_DRIVE_3, MotorType.kBrushless);
 
   private SpeedControllerGroup rightMotors = new SpeedControllerGroup(right1, right2, right3);
 
-  // Drive controller
+  //Drive controller
   private DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
 
+  //Gyto
   private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
   public Drivetrain() {
@@ -53,7 +55,7 @@ public class Drivetrain extends Subsystem {
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    setDefaultCommand(new JoystickDrive());
+    setDefaultCommand(null);
   }
 
   public void tank(double left, double right) {
@@ -61,12 +63,6 @@ public class Drivetrain extends Subsystem {
   }
 
   public void arcade(double xSpeed, double zRotation) {
-    // System.out.println("This is left encoder value:" + leftEncoder.get());
-    // System.out.println("This is right encoder value:" + rightEncoder.get());
-    //System.out.println("This is total distance travelled (left):" + leftEncoder.getDistance());
-    //System.out.println("This is total distance travelled (right):" + rightEncoder.getDistance());
-
-    //System.out.println("Gyro: " + gyro.getAngle());
     drive.arcadeDrive(xSpeed, zRotation);
   }
 
@@ -74,8 +70,14 @@ public class Drivetrain extends Subsystem {
     return gyro;
   }
 
-  public double getAngle() {
-    return this.gyro.getAngle();
+  public CANEncoder getLeftEncoder() {
+    return left1.getEncoder();
   }
 
+  public CANEncoder getRightEncoder() {
+    return right1.getEncoder();
+  }
+  public double getAngle() {
+    return gyro.getAngle();
+  }
 }

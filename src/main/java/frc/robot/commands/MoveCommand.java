@@ -10,22 +10,22 @@ public class MoveCommand extends Command {
     private double distance;
 
     public MoveCommand(double target) {
-        this.requires(Robot.drivetrain);
-        this.target = target;
-        this.distance = 0.0;
+        requires(Robot.drivetrain);
+        target = target;
+        distance = 0.0;
     }
 
     @Override
     protected void initialize() {
-        Robot.drivetrain.getLeftEncoder().reset();
-        Robot.drivetrain.getRightEncoder().reset();
+        // Robot.drivetrain.getLeftEncoder().reset();
+        // Robot.drivetrain.getRightEncoder().reset();
 
         Robot.drivetrain.arcade(Constants.ALIGN_MOVE_SPEED, 0);
     }
 
     @Override
     protected void execute() {
-        this.distance = (Robot.drivetrain.getLeftEncoder().getDistance() + Robot.drivetrain.getRightEncoder().getDistance()) / 2;
+        //this.distance = (Robot.drivetrain.getLeftEncoder().getDistance() + Robot.drivetrain.getRightEncoder().getDistance()) / 2;
     }
 
     @Override

@@ -25,8 +25,8 @@ public class SmartDash extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    SmartDashboard.putData("Right Drive Train Encoder", Robot.drivetrain.getRightEncoder());
-    SmartDashboard.putData("Left Drive Train Encoder", Robot.drivetrain.getLeftEncoder());
+    SmartDashboard.putNumber("Right Encoder Position", Robot.drivetrain.getRightEncoder().getPosition());
+    SmartDashboard.putNumber("Left Encoder Position", Robot.drivetrain.getLeftEncoder().getPosition());
 
   }
 

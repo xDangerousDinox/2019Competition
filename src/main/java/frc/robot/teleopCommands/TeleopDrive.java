@@ -5,14 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.teleopCommands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class JoystickDrive extends Command {
-  public JoystickDrive() {
+public class TeleopDrive extends Command {
+  public TeleopDrive() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.drivetrain);
   }
@@ -25,13 +24,10 @@ public class JoystickDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double y = -1 * Robot.joystick.getY();
-    double z = Robot.joystick.getZ();
-
-    SmartDashboard.putData("Right Drive Train Encoder", Robot.drivetrain.getRightEncoder());
-    SmartDashboard.putData("Left Drive Train Encoder", Robot.drivetrain.getLeftEncoder());
+    double y = Robot.oi.getDriveY();
+    double z = Robot.oi.getDriveX();
     
-   // Robot.drivetrain.arcade(y * 1, z * 0.75);
+    Robot.drivetrain.arcade(y, z);
   }
 
   // Make this return true when this Command no longer needs to run execute()

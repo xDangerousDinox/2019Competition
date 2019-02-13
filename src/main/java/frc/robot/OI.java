@@ -15,26 +15,16 @@ import frc.robot.commands.*;
 public class OI {
     public final Joystick driveStick;
     public final Joystick operatorStick;
-    private Button driveTrigger;
-    private Button driveSideButton;
     private Button autoAlignButton;
-
-    private Button operatorTrigger;//Eject
-    private Button operatorSideButton;//Suck
 
     public static final int AUTOALIGNBUTTON = 3;
     
     public OI() {
         this.driveStick = new Joystick(0);
         this.operatorStick = new Joystick(1);
-        this.driveTrigger = new JoystickButton(driveStick, 1);
-        this.driveSideButton = new JoystickButton(driveStick, 2);
 
         this.autoAlignButton = new JoystickButton(driveStick, OI.AUTOALIGNBUTTON);
         this.autoAlignButton.whenPressed(new AutoAlignCommand());
-
-        this.operatorTrigger = new JoystickButton(operatorStick, 1);
-        this.operatorSideButton = new JoystickButton(operatorStick, 2);
       }
 
       // Drive Stick

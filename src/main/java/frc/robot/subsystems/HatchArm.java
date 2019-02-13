@@ -23,7 +23,7 @@ public class HatchArm extends Subsystem {
 
   private CANSparkMax hatchArm = new CANSparkMax(RobotMap.ARM_HATCH, MotorType.kBrushed);
 
-  private DoubleSolenoid hatchRelease = new DoubleSolenoid(forwardChannel, reverseChannel);
+  //private DoubleSolenoid hatchRelease = new DoubleSolenoid(forwardChannel, reverseChannel);
 
   @Override
   public void initDefaultCommand() {
