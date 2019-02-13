@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -23,6 +24,8 @@ public class CargoArm extends Subsystem {
   private CANSparkMax cargoArm = new CANSparkMax(RobotMap.ARM_CARGO, MotorType.kBrushed);
   private CANSparkMax shoot = new CANSparkMax(RobotMap.SHOOT, MotorType.kBrushed);
 
+  private Encoder cargoArmEncoder = new Encoder(RobotMap.CARGO_ENCODER_A, RobotMap.CARGO_ENCODER_B);
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -31,6 +34,10 @@ public class CargoArm extends Subsystem {
 
   public void setCargoArm(double speed) {
     cargoArm.set(speed);
+  }
+
+  public void getAngle() {
+    cargoArmEncoder.getDistance();
   }
 
   public void shootOut() {

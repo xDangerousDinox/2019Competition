@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -22,6 +23,8 @@ public class Climb extends Subsystem {
 
   private CANSparkMax climbMotor = new CANSparkMax(RobotMap.CLIMB, MotorType.kBrushed);
 
+  private Encoder climbEncoder = new Encoder(RobotMap.CLIMB_ENCODER_A, RobotMap.CLIMB_ENCODER_B);
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -30,5 +33,9 @@ public class Climb extends Subsystem {
 
   public void setClimbMotor(double speed) {
     climbMotor.set(speed);
+  }
+
+  public double getAngle() {
+    return climbEncoder.getDistance();
   }
 }
