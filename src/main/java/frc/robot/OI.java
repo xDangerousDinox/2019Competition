@@ -15,6 +15,7 @@ import frc.robot.commands.*;
 public class OI {
     public final Joystick driveStick;
     public final Joystick operatorStick;
+
     private Button autoAlignButton;
 
     public static final int AUTOALIGNBUTTON = 3;
@@ -25,6 +26,7 @@ public class OI {
 
         this.autoAlignButton = new JoystickButton(driveStick, OI.AUTOALIGNBUTTON);
         this.autoAlignButton.whenPressed(new AutoAlignCommand());
+
       }
 
       // Drive Stick

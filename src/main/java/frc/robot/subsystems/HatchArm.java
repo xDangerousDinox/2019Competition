@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -22,8 +23,9 @@ public class HatchArm extends Subsystem {
   // here. Call these from Commands.
 
   private CANSparkMax hatchArm = new CANSparkMax(RobotMap.ARM_HATCH, MotorType.kBrushed);
+  private Encoder hatchEncoder = new Encoder(RobotMap.HATCH_ENCODER_A, RobotMap.HATCH_ENCODER_B);
 
-  //private DoubleSolenoid hatchRelease = new DoubleSolenoid(forwardChannel, reverseChannel);
+  private DoubleSolenoid hatchRelease = new DoubleSolenoid(RobotMap.HATCH_SOLENDOID_CHANNEL_IN, RobotMap.HATCH_SOLENOID_CHANNEL_OUT);
 
   @Override
   public void initDefaultCommand() {
@@ -33,5 +35,22 @@ public class HatchArm extends Subsystem {
 
   public void setHatchArm(double speed) {
     hatchArm.set(speed);
+  }
+
+  //TODO get actual angle
+  public double getAngle() {
+    return hatchEncoder.getDistance();
+  }
+
+  public void forward() {
+    hatchRelease.set(DoubleSolenoid.Value.kForward);
+  }
+
+  public void reverse() {
+    hatchRelease.set(DoubleSolenoid.Value.kReverse);
+  }
+
+  public void stop() {
+    hatchRelease.set(DoubleSolenoid.Value.kOff);
   }
 }

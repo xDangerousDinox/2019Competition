@@ -2,15 +2,15 @@ package frc.robot;
 
 public class RobotMap {
 
-    public static final int FRONT_LEFT_TALON = 2;
-    public static final int BACK_LEFT_TALON = 1;
-    public static final int FRONT_RIGHT_TALON = 3;
-    public static final int BACK_RIGHT_TALON = 0;
+    //Encoders
+    public static final int HATCH_ENCODER_A = 0;
+    public static final int HATCH_ENCODER_B = 1;
 
-    public static final int FRONT_LEFT_ENCODER = 0;//TODO
-    public static final int BACK_LEFT_ENCODER = 1;
-    public static final int FRONT_RIGHT_ENCODER = 4;
-    public static final int BACK_RIGHT_ENCODER = 5;
+    public static final int CARGO_ENCODER_A = 2;
+    public static final int CARGO_ENCODER_B = 3;
+
+    public static final int CLIMB_ENCODER_A = 4;
+    public static final int CLIMB_ENCODER_B = 5;
 
     //Left drive motors
     public static final int LEFT_DRIVE_1 = 4;

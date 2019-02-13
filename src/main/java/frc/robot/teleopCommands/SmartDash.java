@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.teleopCommands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,7 +27,6 @@ public class SmartDash extends Command {
   protected void execute() {
     SmartDashboard.putNumber("Right Encoder Position", Robot.drivetrain.getRightEncoder().getPosition());
     SmartDashboard.putNumber("Left Encoder Position", Robot.drivetrain.getLeftEncoder().getPosition());
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
