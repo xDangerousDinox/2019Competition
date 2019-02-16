@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.VisionThread;
 import frc.robot.commands.JoystickDrive;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.UltrasonicSensor;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
@@ -40,10 +41,12 @@ public class Robot extends TimedRobot {
   public static Joystick joystick = new Joystick(0);
 
   public static Drivetrain drivetrain = new Drivetrain();
+  public static UltrasonicSensor sensor = new UltrasonicSensor();
 
   Encoder leftEncoder = drivetrain.getLeftEncoder();
   Encoder rightEncoder = drivetrain.getRightEncoder();
   ADXRS450_Gyro gyro = drivetrain.getGyro();
+
 
   EncoderFollower leftFollower;
   EncoderFollower rightFollower;
@@ -211,6 +214,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     super.teleopInit();
+
   }
 
   /**
@@ -219,6 +223,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    double distance = sensor.getDistance();
+    System.out.println("distance in milimeters: " + distance);
+    System.out.println("distance in centimeters: " + distance*10);
+    System.out.println("distance in inches: " + 0.393701*distance*10);
   }
 
   /**
