@@ -93,6 +93,8 @@ public class Robot extends TimedRobot {
 
     leftFollower.configurePIDVA(1, 0, 0.9, 1 / 2.5, 0);
     rightFollower.configurePIDVA(1, 0, 0.9, 1 / 3.2, 0);
+
+    drivetrain.getGyro().calibrate();
   }
 
   /**
@@ -187,9 +189,11 @@ public class Robot extends TimedRobot {
       drivetrain.tank(leftOutput + turnTraj, rightOutput - turnTraj);
       break;
     case kVisionAuto:
-      System.out.println("CenterX:" + visionTable.getEntry("centerX").getDouble(0));
-      //double turn = visionTable.getEntry("centerX").getDouble(0) - (320 / 2);
-      //drivetrain.arcade(0, turn * 0.005);
+      //System.out.println("CenterX:" + visionTable.getEntry("centerX").getDouble(160));
+      //System.out.println("DistanceFT" + visionTable.getEntry("distanceTarget").getDouble(0));
+      double turn = visionTable.getEntry("centerX").getDouble(160) - (320 / 2);
+      System.out.println("Turn" + turn);
+      drivetrain.arcade(0, turn * 0.005);
       break;
     }
   }
@@ -197,6 +201,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     super.teleopInit();
+    drive.start();
 
   }
 
@@ -206,10 +211,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    // System.out.println(drivetrain.getGyro().getAngle() + "angle");
+    // System.out.println(drivetrain.getGyro().isConnected() + "connected?");
     double distance = sensor.getDistance();
     System.out.println("distance in milimeters: " + distance);
     System.out.println("distance in centimeters: " + distance*10);
     System.out.println("distance in inches: " + 0.393701*distance*10);
+    System.out.println("voltage" + sensor.getVoltage());
   }
 
   /**
