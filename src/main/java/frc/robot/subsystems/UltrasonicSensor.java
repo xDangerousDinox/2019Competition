@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class UltrasonicSensor extends Subsystem {
  
-  AnalogInput ultrasonicSensor = new AnalogInput(0);
+  private AnalogInput ultrasonicSensor = new AnalogInput(0);
 
 //int raw = ultrasonicSensor.getValue();
 //int averageRaw = ultrasonicSensor.getAverageValue();
@@ -25,8 +25,12 @@ public class UltrasonicSensor extends Subsystem {
 
 public double getDistance(){
  double volts = ultrasonicSensor.getVoltage();
- double distance = ((5/1024)*5)/volts;
+ double distance = ((5.0/1024.0)*5.0)/volts;
  return distance;
+}
+
+public double getVoltage() {
+  return ultrasonicSensor.getVoltage();
 }
 
 

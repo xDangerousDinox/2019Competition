@@ -217,6 +217,7 @@ public class Robot extends TimedRobot {
     System.out.println("distance in milimeters: " + distance);
     System.out.println("distance in centimeters: " + distance*10);
     System.out.println("distance in inches: " + 0.393701*distance*10);
+    System.out.println("voltage" + sensor.getVoltage());
   }
 
   /**
