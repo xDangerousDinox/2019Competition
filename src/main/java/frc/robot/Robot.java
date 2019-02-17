@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
@@ -62,11 +63,11 @@ public class Robot extends TimedRobot {
   private NetworkTable visionTable = inst.getTable("TestTable");
   private JoystickDrive drive = new JoystickDrive();
 
-  private double centerX = 0.0;
-
   public static OI oi = new OI();
 
-  private final Object imgLock = new Object();
+  private Servo bikeServo = new Servo(4);
+  private boolean isPulling = false;
+
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -218,17 +219,26 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    System.out.println(gyro.getAngle() + "angle");
+    // System.out.println(gyro.getAngle() + "angle");
     //System.out.println(drivetrain.getGyro().isConnected() + "connected?");
-    double distance = sensor.getDistance();
+    // double distance = sensor.getDistance();
     // System.out.println(gyro.getAngle() + " gyro angle");
-    System.out.println(gyro.getRate() + " gyro rate");
+    // System.out.println(gyro.getRate() + " gyro rate");
     //System.out.println(gyro.isConnected() + " connected?");
     //double distance = sensor.getDistance();
     // System.out.println("distance in milimeters: " + distance);
     // System.out.println("distance in centimeters: " + distance/10);
     //System.out.println("distance in inches: " + distance);
     //System.out.println("voltage" + sensor.getVoltage());
+    if (joystick.getRawButtonReleased(11)) {
+      if (isPulling) {
+        bikeServo.set(1);
+        isPulling = false;
+      } else {
+        bikeServo.set(0);
+        isPulling = true;
+      }
+    }
   }
 
   /**
