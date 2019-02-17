@@ -90,6 +90,8 @@ public class Robot extends TimedRobot {
 
     leftFollower.configurePIDVA(1, 0, 0.9, 1 / 2.5, 0);
     rightFollower.configurePIDVA(1, 0, 0.9, 1 / 3.2, 0);
+
+    drivetrain.getGyro().calibrate();
   }
 
   /**
@@ -205,6 +207,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    System.out.println(drivetrain.getGyro().getAngle() + "angle");
+    System.out.println(drivetrain.getGyro().isConnected() + "connected?");
   }
 
   /**

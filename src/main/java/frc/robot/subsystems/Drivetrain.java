@@ -7,11 +7,14 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.command.*;
-import edu.wpi.first.wpilibj.drive.*;
-import frc.robot.*;
-import frc.robot.commands.*;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.RobotMap;
+import frc.robot.commands.JoystickDrive;
 
 /**
  * Add your docs here.
@@ -53,7 +56,7 @@ public class Drivetrain extends Subsystem {
     rightEncoder.setSamplesToAverage(7);
     
     // Set up gyro
-    gyro.calibrate();
+    //gyro.calibrate();
 
     // Enable drivetrain
     drive.setSafetyEnabled(false);
