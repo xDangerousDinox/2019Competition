@@ -29,7 +29,9 @@ public class TurnCommand extends Command {
             
                 @Override
                 public double pidGet() {
-                    return Robot.drivetrain.getAngle();
+                    //return Robot.drivetrain.getAngle();
+                    return 0;
+                    //don't leave this in frankie! fix it!
                 }
             
                 @Override

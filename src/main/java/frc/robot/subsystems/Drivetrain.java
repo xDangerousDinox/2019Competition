@@ -7,13 +7,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.RobotMap;
 import frc.robot.commands.JoystickDrive;
 
@@ -41,7 +39,7 @@ public class Drivetrain extends Subsystem {
   private Encoder leftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
   private Encoder rightEncoder = new Encoder(2, 3, false, Encoder.EncodingType.k4X);
 
-  private Gyro gyro = new ADXRS450_Gyro();
+  //private Gyro gyro = new ADXRS450_Gyro();
 
   public Drivetrain() {
     // Set up encoders
@@ -92,12 +90,11 @@ public class Drivetrain extends Subsystem {
     return rightEncoder;
   }
 
-  public Gyro getGyro() {
-    return gyro;
-  }
+  // public Gyro getGyro() {
+  //   return gyro;
+  // }
 
-  public double getAngle() {
-    return this.gyro.getAngle();
-  }
-
+  // public double getAngle() {
+  //   return gyro.getAngle();
+  // }
 }
