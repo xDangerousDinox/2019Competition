@@ -68,7 +68,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public void tank(double left, double right) {
-    drive.tankDrive(left, right);
+    //drive.tankDrive(left, right);
   }
 
   public void arcade(double xSpeed, double zRotation) {
@@ -78,7 +78,7 @@ public class Drivetrain extends Subsystem {
     //System.out.println("This is total distance travelled (right):" + rightEncoder.getDistance());
 
     //System.out.println("Gyro: " + gyro.getAngle());
-    drive.arcadeDrive(xSpeed, zRotation);
+    //drive.arcadeDrive(xSpeed, zRotation);
   
   }
 
