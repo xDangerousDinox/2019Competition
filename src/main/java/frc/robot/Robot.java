@@ -211,13 +211,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    System.out.println(drivetrain.getGyro().getAngle() + "angle");
-    System.out.println(drivetrain.getGyro().isConnected() + "connected?");
-    // double distance = sensor.getDistance();
+    // System.out.println(drivetrain.getGyro().getAngle() + "angle");
+    // System.out.println(drivetrain.getGyro().isConnected() + "connected?");
+    double distance = sensor.getDistance();
     // System.out.println("distance in milimeters: " + distance);
     // System.out.println("distance in centimeters: " + distance/10);
-    // System.out.println("distance in inches: " + 0.393701*distance/10);
-    // System.out.println("voltage" + sensor.getVoltage());
+    System.out.println("distance in inches: " + distance);
+    System.out.println("voltage" + sensor.getVoltage());
   }
 
   /**
