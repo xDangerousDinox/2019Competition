@@ -7,13 +7,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.RobotMap;
 import frc.robot.commands.JoystickDrive;
 
@@ -92,12 +90,11 @@ public class Drivetrain extends Subsystem {
     return rightEncoder;
   }
 
-  /*public Gyro getGyro() {
-    return gyro;
-  }
+  // public Gyro getGyro() {
+  //   return gyro;
+  // }
 
-  public double getAngle() {
-    return gyro.getAngle();
-  }*/
-
+  // public double getAngle() {
+  //   return gyro.getAngle();
+  // }
 }

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 //import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,7 +52,7 @@ public class Robot extends TimedRobot {
 
   Encoder leftEncoder = drivetrain.getLeftEncoder();
   Encoder rightEncoder = drivetrain.getRightEncoder();
-  private ADXRS450_Gyro gyro = new ADXRS450_Gyro(kGyroPort);
+  private Gyro gyro = new ADXRS450_Gyro(kGyroPort);
 
 
   EncoderFollower leftFollower;
@@ -99,6 +100,7 @@ public class Robot extends TimedRobot {
     leftFollower.configurePIDVA(1, 0, 0.9, 1 / 2.5, 0);
     rightFollower.configurePIDVA(1, 0, 0.9, 1 / 3.2, 0);
 
+    gyro.calibrate();
     
   }
 
@@ -216,9 +218,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    System.out.println(gyro.getAngle() + " gyro angle");
+    System.out.println(gyro.getAngle() + "angle");
+    //System.out.println(drivetrain.getGyro().isConnected() + "connected?");
+    double distance = sensor.getDistance();
+    // System.out.println(gyro.getAngle() + " gyro angle");
     System.out.println(gyro.getRate() + " gyro rate");
-    System.out.println(gyro.isConnected() + " connected?");
+    //System.out.println(gyro.isConnected() + " connected?");
     //double distance = sensor.getDistance();
     // System.out.println("distance in milimeters: " + distance);
     // System.out.println("distance in centimeters: " + distance/10);
