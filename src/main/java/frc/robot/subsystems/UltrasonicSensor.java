@@ -25,7 +25,7 @@ public class UltrasonicSensor extends Subsystem {
 
 public double getDistance(){
  double volts = ultrasonicSensor.getVoltage();
- double distance = ((5.0/1024.0)*5.0)/volts;
+ double distance = volts / 0.00097239;
  return distance;
 }
 
