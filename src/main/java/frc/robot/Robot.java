@@ -14,9 +14,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
+//import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.JoystickDrive;
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private static final String kVisionAuto = "VisionFollow";
+  private static final SPI.Port kGyroPort = SPI.Port.kOnboardCS0;
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -49,7 +51,7 @@ public class Robot extends TimedRobot {
 
   Encoder leftEncoder = drivetrain.getLeftEncoder();
   Encoder rightEncoder = drivetrain.getRightEncoder();
-  Gyro gyro = drivetrain.getGyro();
+  private ADXRS450_Gyro gyro = new ADXRS450_Gyro(kGyroPort);
 
 
   EncoderFollower leftFollower;
@@ -72,6 +74,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+
+    gyro.calibrate();
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -95,7 +99,7 @@ public class Robot extends TimedRobot {
     leftFollower.configurePIDVA(1, 0, 0.9, 1 / 2.5, 0);
     rightFollower.configurePIDVA(1, 0, 0.9, 1 / 3.2, 0);
 
-    gyro.calibrate();
+    
   }
 
   /**
@@ -212,13 +216,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    System.out.println(gyro.getAngle() + "angle");
-    //system.out.println(gyro.isConnected() + "connected?");
-    double distance = sensor.getDistance();
+    System.out.println(gyro.getAngle() + " gyro angle");
+    System.out.println(gyro.getRate() + " gyro rate");
+    System.out.println(gyro.isConnected() + " connected?");
+    //double distance = sensor.getDistance();
     // System.out.println("distance in milimeters: " + distance);
     // System.out.println("distance in centimeters: " + distance/10);
-    System.out.println("distance in inches: " + distance);
-    System.out.println("voltage" + sensor.getVoltage());
+    //System.out.println("distance in inches: " + distance);
+    //System.out.println("voltage" + sensor.getVoltage());
   }
 
   /**

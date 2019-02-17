@@ -41,7 +41,7 @@ public class Drivetrain extends Subsystem {
   private Encoder leftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
   private Encoder rightEncoder = new Encoder(2, 3, false, Encoder.EncodingType.k4X);
 
-  private Gyro gyro = new ADXRS450_Gyro();
+  //private Gyro gyro = new ADXRS450_Gyro();
 
   public Drivetrain() {
     // Set up encoders
@@ -92,12 +92,12 @@ public class Drivetrain extends Subsystem {
     return rightEncoder;
   }
 
-  public Gyro getGyro() {
+  /*public Gyro getGyro() {
     return gyro;
   }
 
   public double getAngle() {
     return gyro.getAngle();
-  }
+  }*/
 
 }
