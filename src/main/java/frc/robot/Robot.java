@@ -9,6 +9,8 @@ package frc.robot;
 
 import java.io.File;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -28,7 +30,6 @@ import frc.robot.subsystems.UltrasonicSensor;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -68,6 +69,8 @@ public class Robot extends TimedRobot {
   private Servo bikeServo = new Servo(4);
   private boolean isPulling = false;
 
+  //private CANSparkMax testSpark = new CANSparkMax(4, MotorType.kBrushed);
+  private WPI_TalonSRX testSRX = new WPI_TalonSRX(4);
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -209,7 +212,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     super.teleopInit();
-    drive.start();
+    //drive.start();
 
   }
 
@@ -230,15 +233,17 @@ public class Robot extends TimedRobot {
     // System.out.println("distance in centimeters: " + distance/10);
     //System.out.println("distance in inches: " + distance);
     //System.out.println("voltage" + sensor.getVoltage());
-    if (joystick.getRawButtonReleased(11)) {
-      if (isPulling) {
-        bikeServo.set(1);
-        isPulling = false;
-      } else {
-        bikeServo.set(0);
-        isPulling = true;
-      }
-    }
+    // if (joystick.getRawButtonReleased(11)) {
+    //   if (isPulling) {
+    //     bikeServo.set(1);
+    //     isPulling = false;
+    //   } else {
+    //     bikeServo.set(0);
+    //     isPulling = true;
+    //   }
+    // }
+    testSpark.set(joystick.getY());
+    System.out.println(testSpark.getEncoder().getVelocity());
   }
 
   /**
