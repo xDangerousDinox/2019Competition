@@ -9,7 +9,10 @@ package frc.robot;
 
 import java.io.File;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -21,7 +24,6 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-//import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.JoystickDrive;
@@ -30,6 +32,7 @@ import frc.robot.subsystems.UltrasonicSensor;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -47,15 +50,13 @@ public class Robot extends TimedRobot {
 
   public static Joystick joystick = new Joystick(0);
 
-  
-  public static BaseCamera camera = new ImplCamera();//TODO REPLACE THIS IMMEDITELY!
+  public static BaseCamera camera = new ImplCamera();// TODO REPLACE THIS IMMEDITELY!
   public static Drivetrain drivetrain = new Drivetrain();
   public static UltrasonicSensor sensor = new UltrasonicSensor();
 
   Encoder leftEncoder = drivetrain.getLeftEncoder();
   Encoder rightEncoder = drivetrain.getRightEncoder();
   private Gyro gyro = new ADXRS450_Gyro(kGyroPort);
-
 
   EncoderFollower leftFollower;
   EncoderFollower rightFollower;
@@ -69,7 +70,7 @@ public class Robot extends TimedRobot {
   private Servo bikeServo = new Servo(4);
   private boolean isPulling = false;
 
-  //private CANSparkMax testSpark = new CANSparkMax(4, MotorType.kBrushed);
+  //private CANSparkMax testSpark = new CANSparkMax(5, MotorType.kBrushed);
   private WPI_TalonSRX testSRX = new WPI_TalonSRX(4);
 
   /**
@@ -105,7 +106,11 @@ public class Robot extends TimedRobot {
     rightFollower.configurePIDVA(1, 0, 0.9, 1 / 3.2, 0);
 
     gyro.calibrate();
-    
+
+    testSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    testSRX.setSensorPhase(false);
+    testSRX.setSelectedSensorPosition(0, 0, 0);
+
   }
 
   /**
@@ -200,8 +205,10 @@ public class Robot extends TimedRobot {
       drivetrain.tank(leftOutput + turnTraj, rightOutput - turnTraj);
       break;
     case kVisionAuto:
-      //System.out.println("CenterX:" + visionTable.getEntry("centerX").getDouble(160));
-      //System.out.println("DistanceFT" + visionTable.getEntry("distanceTarget").getDouble(0));
+      // System.out.println("CenterX:" +
+      // visionTable.getEntry("centerX").getDouble(160));
+      // System.out.println("DistanceFT" +
+      // visionTable.getEntry("distanceTarget").getDouble(0));
       double turn = visionTable.getEntry("centerX").getDouble(160) - (320 / 2);
       System.out.println("Turn" + turn);
       drivetrain.arcade(0, turn * 0.005);
@@ -212,7 +219,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     super.teleopInit();
-    //drive.start();
+    // drive.start();
 
   }
 
@@ -223,27 +230,29 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     // System.out.println(gyro.getAngle() + "angle");
-    //System.out.println(drivetrain.getGyro().isConnected() + "connected?");
+    // System.out.println(drivetrain.getGyro().isConnected() + "connected?");
     // double distance = sensor.getDistance();
     // System.out.println(gyro.getAngle() + " gyro angle");
     // System.out.println(gyro.getRate() + " gyro rate");
-    //System.out.println(gyro.isConnected() + " connected?");
-    //double distance = sensor.getDistance();
+    // System.out.println(gyro.isConnected() + " connected?");
+    // double distance = sensor.getDistance();
     // System.out.println("distance in milimeters: " + distance);
     // System.out.println("distance in centimeters: " + distance/10);
-    //System.out.println("distance in inches: " + distance);
-    //System.out.println("voltage" + sensor.getVoltage());
+    // System.out.println("distance in inches: " + distance);
+    // System.out.println("voltage" + sensor.getVoltage());
     // if (joystick.getRawButtonReleased(11)) {
-    //   if (isPulling) {
-    //     bikeServo.set(1);
-    //     isPulling = false;
-    //   } else {
-    //     bikeServo.set(0);
-    //     isPulling = true;
-    //   }
+    // if (isPulling) {
+    // bikeServo.set(1);
+    // isPulling = false;
+    // } else {
+    // bikeServo.set(0);
+    // isPulling = true;
     // }
-    testSpark.set(joystick.getY());
-    System.out.println(testSpark.getEncoder().getVelocity());
+    // }
+    // testSpark.set(joystick.getY());
+    // System.out.println(testSpark.getEncoder().getVelocity());
+    testSRX.set(joystick.getY());
+    System.out.println(testSRX.getSelectedSensorPosition() + "position");
   }
 
   /**
