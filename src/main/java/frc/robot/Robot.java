@@ -251,8 +251,9 @@ public class Robot extends TimedRobot {
     // }
     // testSpark.set(joystick.getY());
     // System.out.println(testSpark.getEncoder().getVelocity());
-    testSRX.set(joystick.getY());
-    System.out.println(testSRX.getSelectedSensorPosition() + "position");
+    // testSRX.set(joystick.getY());
+    // System.out.println(testSRX.getSelectedSensorPosition() + "position");
+    System.out.println(gyro.getAngle() + "angle");
   }
 
   /**
