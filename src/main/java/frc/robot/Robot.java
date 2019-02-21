@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
 
   public static Joystick joystick = new Joystick(0);
 
-  public static BaseCamera camera = new ImplCamera();// TODO REPLACE THIS IMMEDITELY!
+  public static BaseCamera camera = new ImplCamera();
   public static Drivetrain drivetrain = new Drivetrain();
   public static UltrasonicSensor sensor = new UltrasonicSensor();
 
